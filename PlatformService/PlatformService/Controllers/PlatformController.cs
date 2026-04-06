@@ -31,13 +31,14 @@ namespace PlatformService.Controllers
 
 
         [HttpGet]
-        public ActionResult <IEnumerable<PlatformReadDto>> GetPlatforms()
+        public ActionResult<IEnumerable<PlatformReadDto>> GetPlatforms()
         {
             Console.WriteLine("Getting all platforms...");
             var platformItems = _repository.GetAllPlatforms();
             return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItems));
-           
+
         }
+
 
         [HttpGet("{id}", Name = "GetPlatformById")]
         public ActionResult<PlatformReadDto> GetPlatformById(int id)
@@ -55,7 +56,7 @@ namespace PlatformService.Controllers
             var platformModel = _mapper.Map<Platform>(platformCreateDto);
             _repository.createPlatform(platformModel);
             _repository.SaveChanges();
-            
+
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
             try
             {
@@ -75,8 +76,22 @@ namespace PlatformService.Controllers
             {
                 Console.WriteLine($"Could not send data asynchrounously : {ex.Message}");
             }
-            return CreatedAtRoute(nameof(GetPlatformById), new { id = platformReadDto.Id}, platformReadDto);
-            
+            return CreatedAtRoute(nameof(GetPlatformById), new { id = platformReadDto.Id }, platformReadDto);
+
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<PlatformDeleteDto> DeletePlatform(int id)
+        {
+            var platform = _repository.GetPlatformById(id);
+            if (platform == null)
+            {
+                return NotFound();
+            }
+            var platformDeleteDto = _mapper.Map<PlatformDeleteDto>(platform);
+            _repository.DeletePlatform(id);
+            _repository.SaveChanges();
+            return Ok(platformDeleteDto);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace PlatformService.Data
         Platform GetPlatformById(int id);
         void createPlatform(Platform platform);
 
+        void DeletePlatform(int id);
+
 
     }
 }
