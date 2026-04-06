@@ -17,6 +17,7 @@ namespace PlatformService.Profiles
             CreateMap<PlatformReadDto, PlatformPublishedDto>();
             CreateMap<Platform, GrpcPlatformModel>().ForMember(
                             dest => dest.PlatformId,opt => opt.MapFrom(src => src.Id));
+            CreateMap<Platform, PlatformDeleteDto>();
         }
     }
 }

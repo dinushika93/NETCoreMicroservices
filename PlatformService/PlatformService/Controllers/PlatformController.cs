@@ -78,5 +78,18 @@ namespace PlatformService.Controllers
             return CreatedAtRoute(nameof(GetPlatformById), new { id = platformReadDto.Id}, platformReadDto);
             
         }
+        [HttpDelete("{id}")]
+        public ActionResult<PlatformDeleteDto> DeletePlatform(int id)
+        {
+            var platform = _repository.GetPlatformById(id);
+            if (platform == null)
+            {
+                return NotFound();
+            }
+            var platformDeleteDto = _mapper.Map<PlatformDeleteDto>(platform);
+            _repository.DeletePlatform(id);
+            _repository.SaveChanges();
+            return Ok(platformDeleteDto);
+        }
     }
 }
